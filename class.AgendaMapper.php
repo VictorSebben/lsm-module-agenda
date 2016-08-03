@@ -35,7 +35,7 @@ class AgendaMapper extends Mapper {
             $params[ 'dir' ] = 'DESC';
         }
 
-        $ord = 'id';
+        $ord = 'date';
         $rs = self::$_pdo->query( 'SELECT * FROM agenda LIMIT 0' );
         for ( $i = 0; $i < $rs->columnCount(); $i++ ) {
             if ( $rs->getColumnMeta( $i )[ 'name' ] == $params[ 'ord' ] ) {
@@ -100,5 +100,27 @@ class AgendaMapper extends Mapper {
         $selectStmt->execute();
         $this->pagination->numRecords = $selectStmt->fetch( PDO::FETCH_OBJ )->count;
         $selectStmt->closeCursor();
+    }
+
+    public function deleteAjax( $agendaIds ) {
+        self::$_pdo->beginTransaction();
+
+        try {
+            // SQL do delete agenda items
+            $sql = 'DELETE FROM agenda WHERE id IN (' .
+                implode( ',', array_map( function( $value ) { return '?'; }, $agendaIds ) ) . ')';
+
+            $stmt = self::$_pdo->prepare( $sql );
+            $stmt->execute( $agendaIds );
+            $stmt->closeCursor();
+
+            // If everything worked out, commit transaction and return true
+            self::$_pdo->commit();
+            return true;
+        } catch ( Exception $e ) {
+            self::$_pdo->rollBack();
+            echo $e->getMessage();
+            return false;
+        }
     }
 }

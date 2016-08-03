@@ -25,14 +25,9 @@
 
 <h2 id="area-header">Itens de Agenda</h2>
 
-<?php if ( isset( $this->flashMsg[ 'success' ] ) ) : ?>
-    <div class="flash success-msg">
-        <?= $this->flashMsg[ 'success' ]; ?>
-    </div>
-<?php endif; ?>
-<?php if ( isset( $this->flashMsg[ 'err' ] ) ) : ?>
-    <div class="flash err-msg">
-        <?= $this->flashMsg[ 'err' ]; ?>
+<?php if ( $this->flashMsg ): ?>
+    <div class="flash <?= $this->flashMsgClass; ?>">
+        <?= $this->flashMsg; ?>
     </div>
 <?php endif; ?>
 
@@ -57,8 +52,8 @@
         <tr>
             <td><input type="checkbox" class="list-item" name="li[]" value="<?= $agenda->id ?>"></td>
             <td><?= $agenda->description; ?></td>
-            <td><?= $agenda->getFormattedDate(); ?></td>
-            <td><?= $agenda->getFormattedTime(); ?></td>
+            <td><?= lsm\modules\agenda\AgendaModel::formatDate( $agenda->date ); ?></td>
+            <td><?= lsm\modules\agenda\AgendaModel::formatTime( $agenda->time ); ?></td>
             <td><?= $agenda->venue; ?></td>
             <td><?= $agenda->city; ?></td>
             <?php if ( $this->editContents ) : ?>

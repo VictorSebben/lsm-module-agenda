@@ -1,0 +1,7 @@
+.ui-datepicker {
+    box-sizing: content-box;
+}
+
+.ui-datepicker table thead {
+    font-size: .9em;
+}
