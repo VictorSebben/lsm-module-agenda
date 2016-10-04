@@ -54,11 +54,7 @@ class AgendaMapper extends Mapper {
 
         // Search category by either name or description
         if ( $this->request->pagParams[ 'search' ] != null ) {
-            if ( self::$_db === 'pgsql' ) {
-                $sql .= 'AND unaccent(description) ILIKE unaccent(:search) ';
-            } else {
-                $sql .= 'AND description ILIKE :search ';
-            }
+            $sql .= 'AND description ILIKE :search ';
         }
 
         $sql .= " ORDER BY {$ord} {$params['dir']}
